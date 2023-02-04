@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Caixa.Domain\Sample.Fluxo.Caixa.Lancamento.Domain.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Core\Sample.Fluxo.Caixa.Core.csproj" />
+  </ItemGroup>
+
+</Project>

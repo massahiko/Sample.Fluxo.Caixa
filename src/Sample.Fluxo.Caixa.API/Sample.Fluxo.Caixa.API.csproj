@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>03142bba-2d06-43a0-98df-1008aff10897</UserSecretsId>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EventSourcing\EventSourcing.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Contas.Data\Sample.Fluxo.Caixa.PlanoContas.Data.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Core\Sample.Fluxo.Caixa.Core.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Lancamento.Application\Sample.Fluxo.Caixa.Lancamento.Application.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Lancamento.Data\Sample.Fluxo.Caixa.Lancamento.Data.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.PlanoContas.Application\Sample.Fluxo.Caixa.PlanoContas.Application.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Saldo.Application\Sample.Fluxo.Caixa.Saldo.Application.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Saldo.Data\Sample.Fluxo.Caixa.Saldo.Data.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Saldo.Domain\Sample.Fluxo.Caixa.Saldo.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

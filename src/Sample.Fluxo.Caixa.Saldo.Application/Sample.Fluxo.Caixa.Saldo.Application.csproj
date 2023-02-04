@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Core\Sample.Fluxo.Caixa.Core.csproj" />
+    <ProjectReference Include="..\Sample.Fluxo.Caixa.Saldo.Domain\Sample.Fluxo.Caixa.Saldo.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
