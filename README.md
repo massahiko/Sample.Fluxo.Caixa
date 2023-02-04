@@ -1,18 +1,18 @@
 # ASP.NET Core - Fluxo de Caixa Simples
 
-App - Este aplica alguns conceito comumente utilizado em arquitetura desacopladas (Sistemas DistribuÌdos, MicroserviÁos). 
+App - Este aplica alguns conceito comumente utilizado em arquitetura desacopladas (Sistemas Distribu√≠dos, Microservi√ßos). 
 
-Com possibilidade de evoluÁ„o como, incluir recursos de mensageria como (RabbitMq, Kafka).
+Com possibilidade de evolu√ß√£o como, incluir recursos de mensageria como (RabbitMq, Kafka).
 
-Nesta aplicaÁ„o temos 3 contextos mapeados. Contas (Conexto auxiliar), LanÁamentos e Saldos (Contexto principal), a comunicaÁ„o entres tais contextos È feita a partir de eventos.
+Nesta aplica√ß√£o temos 3 contextos mapeados. Contas (Conexto auxiliar), Lan√ßamentos e Saldos (Contexto principal), a comunica√ß√£o entres tais contextos √© feita a partir de eventos.
 
 Utilizando a abordagem DDD aplicando conceitos como CQRS, Event Sourcing.
 
-Testes unit·rios e de integraÁ„o devidamente implementados
+Testes unit√°rios e de integra√ß√£o devidamente implementados
 
-Desennho SoluÁ„o
+Desennho Solu√ß√£o
 
-
+![fluxo-de-caixa-diagram](https://user-images.githubusercontent.com/38221988/216742061-2428c595-2fe2-4649-a216-532263b9d380.png)
 
 * **Server Side**: ASP.NET Core
 
@@ -32,7 +32,7 @@ Techs:
 
 # Como Executar
 
-1. Download do cÛdigo
+1. Download do c√≥digo
   * Abrir pasta
   * Abrir terminal
   * Executar docker-compose up --build
