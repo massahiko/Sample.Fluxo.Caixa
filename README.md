@@ -10,7 +10,7 @@ Utilizando a abordagem DDD aplicando conceitos como CQRS, Event Sourcing.
 
 Testes unitários e de integração devidamente implementados
 
-Desennho Solução
+# Desenho da Solução
 
 ![fluxo-de-caixa-diagram](https://user-images.githubusercontent.com/38221988/216742061-2428c595-2fe2-4649-a216-532263b9d380.png)
 
