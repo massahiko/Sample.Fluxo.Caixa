@@ -1,10 +1,10 @@
 # ASP.NET Core - Fluxo de Caixa Simples
 
-App - Este aplica alguns conceito comumente utilizado em arquitetura desacopladas (Sistemas Distribuídos, Microserviços). 
+App - Este aplica alguns conceitos comumente utilizado em arquitetura desacopladas (Sistemas Distribuídos, Microserviços). 
 
 Com possibilidade de evolução como serviços de mensageria (RabbitMq, Kafka).
 
-Nesta aplicação temos 3 contextos mapeados, Contas (Conexto auxiliar), Lançamentos e Saldos (Contexto principal), a comunicação entres tais contextos é feita a partir de eventos.
+Nesta aplicação temos 3 contextos mapeados, Contas (Conexto auxiliar), Lançamentos e Saldos (Contexto principal), a comunicação entres eles é feita a partir de eventos.
 
 Utilizando a abordagem DDD aplicando conceitos como CQRS, Event Sourcing.
 
