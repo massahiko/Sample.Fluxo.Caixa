@@ -27,7 +27,7 @@ Techs:
 * Swagger
 * Sql Server
 * EF Core
-* Event Sourcing
+* Event Sourcing (Eventstore)
 * MongoDb
 
 # Como Executar
