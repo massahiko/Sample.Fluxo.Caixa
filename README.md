@@ -2,9 +2,9 @@
 
 App - Este aplica alguns conceito comumente utilizado em arquitetura desacopladas (Sistemas Distribuídos, Microserviços). 
 
-Com possibilidade de evolução como, incluir recursos de mensageria como (RabbitMq, Kafka).
+Com possibilidade de evolução como serviços de mensageria (RabbitMq, Kafka).
 
-Nesta aplicação temos 3 contextos mapeados. Contas (Conexto auxiliar), Lançamentos e Saldos (Contexto principal), a comunicação entres tais contextos é feita a partir de eventos.
+Nesta aplicação temos 3 contextos mapeados, Contas (Conexto auxiliar), Lançamentos e Saldos (Contexto principal), a comunicação entres tais contextos é feita a partir de eventos.
 
 Utilizando a abordagem DDD aplicando conceitos como CQRS, Event Sourcing.
 
