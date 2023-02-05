@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Saldo.Application.ViewModels;
 using Sample.Fluxo.Caixa.Saldo.Domain;
 using System;
@@ -26,13 +27,21 @@ namespace Sample.Fluxo.Caixa.Saldo.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SaldoViewModel>> ObterTodos()
+        public async Task<PagedResult<SaldoViewModel>> ObterTodos(SaldoFilter saldoFilter)
         {
             try
             {
                 _logger.LogInformation($"Obtendo lista de saldos");
 
-                return _mapper.Map<IEnumerable<SaldoViewModel>>(await _saldoRepository.ObterTodos());
+                var result = await _saldoRepository.ObterTodos(saldoFilter);
+
+                return new PagedResult<SaldoViewModel>()
+                {
+                    Data = _mapper.Map<IEnumerable<SaldoViewModel>>(result.Data),
+                    TotalResults = result.TotalResults,
+                    Page = result.Page,
+                    Size = result.Size,
+                };
             }
             catch (Exception)
             {
@@ -78,7 +87,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Application.Services
             {
                 _logger.LogInformation($"Gerando relatório de Saldos Consolidados");
 
-                var saldos = await ObterTodos();
+                var saldos = (await ObterTodos(new SaldoFilter())).Data;
 
                 var relatorio = new List<string>()
                 {

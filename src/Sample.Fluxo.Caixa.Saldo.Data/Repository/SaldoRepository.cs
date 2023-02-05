@@ -6,6 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using ServiceStack;
+using System.Drawing.Printing;
+using Sample.Fluxo.Caixa.Core.Pageable;
+using Microsoft.VisualBasic;
+using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 
 namespace Sample.Fluxo.Caixa.Saldo.Data.Repository
 {
@@ -32,10 +37,19 @@ namespace Sample.Fluxo.Caixa.Saldo.Data.Repository
                                                               n.DataEscrituracao.Day == dateTime.Day)?.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Domain.Saldo>> ObterTodos()
+        public async Task<PagedResult<Domain.Saldo>> ObterTodos(SaldoFilter saldoFilter)
         {
             var saldos = await _context.Saldos().FindAsync(Builders<Domain.Saldo>.Filter.Empty);
-            return saldos.ToList();
+
+            var result = (await saldos.ToListAsync()).Skip(saldoFilter.Skip).Take(saldoFilter.Size);
+
+            return new PagedResult<Domain.Saldo>()
+            {
+                Data = result,
+                TotalResults = result.Count(),
+                Page = saldoFilter.Page,
+                Size = saldoFilter.Size,
+            };
         }
 
         public async Task<bool> ValidarExisteSaldoInicialOutraData(DateTime dateTime)

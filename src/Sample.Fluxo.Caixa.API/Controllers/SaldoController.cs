@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using Sample.Fluxo.Caixa.Saldo.Application.Services;
+using Sample.Fluxo.Caixa.Saldo.Domain;
 using System;
 using System.Threading.Tasks;
 
@@ -39,9 +40,9 @@ namespace Sample.Fluxo.Caixa.API.Controllers
         /// <response code="400">Os parâmetros não foram passados corretamente ou ocorreu algum erro inesperado durante a execução do método</response>
         /// <response code="500">Ops! Não foi possível obter lista de saldos.</response>
         [HttpGet("ObterTodos")]
-        public async Task<IActionResult> ObterTodos()
+        public async Task<IActionResult> ObterTodos([FromQuery] SaldoFilter saldoFilter)
         {
-            return CustomResponse(await _saldoAppService.ObterTodos());
+            return CustomResponse(await _saldoAppService.ObterTodos(saldoFilter));
         }
 
         /// <summary>

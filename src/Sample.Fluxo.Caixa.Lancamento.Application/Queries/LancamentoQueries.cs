@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sample.Fluxo.Caixa.Core.Data.EventSourcing;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
 using System;
@@ -49,15 +50,21 @@ namespace Sample.Fluxo.Caixa.Lancamento.Application.Queries
             }
         }
 
-        public async Task<IEnumerable<LancamentoViewModel>> ObterTodos()
+        public async Task<PagedResult<LancamentoViewModel>> ObterTodos(LancamentoFilter lancamentoFilter)
         {
             try
             {
                 _logger.LogInformation($"Executando método - LancamentoQueries.ObterTodos");
 
-                var lancamentos = await _lancamentoRepository.ObterTodos();
+                var result = await _lancamentoRepository.ObterTodos(lancamentoFilter);
 
-                return _mapper.Map<IEnumerable<LancamentoViewModel>>(lancamentos).OrderBy(p => p.DataEscrituracao);
+                return new PagedResult<LancamentoViewModel>()
+                {
+                    Data = _mapper.Map<IEnumerable<LancamentoViewModel>>(result.Data),
+                    TotalResults = result.TotalResults,
+                    Page = result.Page,
+                    Size = result.Size,
+                };
             }
             catch (Exception)
             {

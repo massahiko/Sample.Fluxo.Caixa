@@ -21,7 +21,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Domain
 
         public async Task<bool> AtualizarSaldos(DateTime dateTime)
         {
-            var saldos = (await _saldoRepository.ObterTodos()).OrderBy(d => d.DataEscrituracao);
+            var saldos = (await _saldoRepository.ObterTodos(new SaldoFilter())).Data.OrderBy(d => d.DataEscrituracao);
             var saldoFinal = saldos.FirstOrDefault()?.SaldoFinal;
 
             if (saldos.Count() <= 1) return true;

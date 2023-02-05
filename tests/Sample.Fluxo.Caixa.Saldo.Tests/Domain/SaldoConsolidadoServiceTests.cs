@@ -46,8 +46,11 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             var saldosFake = ObterListaSaldosFake();
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
-                .ReturnsAsync(saldosFake);
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Saldo.Domain.Saldo>()
+                {
+                    Data = saldosFake
+                });
 
             _mocker.GetMock<ISaldoRepository>()
                 .Setup(x => x.UnitOfWork.Commit())
@@ -59,7 +62,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             // Assert
             Assert.True(result);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<ISaldoRepository>()
                 .Verify(x => x.Atualizar(It.IsAny<Saldo.Domain.Saldo>()), Times.Exactly(saldosFake.Count() - 1));
             _mocker.GetMock<ISaldoRepository>()
@@ -76,8 +79,8 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             var saldosFake = ObterListaSaldosFake(1);
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
-                .ReturnsAsync(saldosFake);
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Saldo.Domain.Saldo>() { Data = saldosFake });
 
             _mocker.GetMock<ISaldoRepository>()
                 .Setup(x => x.UnitOfWork.Commit())
@@ -89,7 +92,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             // Assert
             Assert.True(result);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<ISaldoRepository>()
                 .Verify(x => x.Atualizar(It.IsAny<Saldo.Domain.Saldo>()), Times.Never);
             _mocker.GetMock<ISaldoRepository>()
@@ -106,8 +109,11 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             var saldosFake = ObterListaSaldosFake();
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
-                .ReturnsAsync(saldosFake);
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Saldo.Domain.Saldo>()
+                {
+                    Data = saldosFake
+                });
 
             _mocker.GetMock<ISaldoRepository>()
                 .Setup(x => x.UnitOfWork.Commit())
@@ -119,7 +125,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             // Assert
             Assert.False(result);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<ISaldoRepository>()
                 .Verify(x => x.Atualizar(It.IsAny<Saldo.Domain.Saldo>()), Times.Exactly(saldosFake.Count() - 1));
             _mocker.GetMock<ISaldoRepository>()
@@ -138,7 +144,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
 
             // Act
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
                 .Throws(new Exception(_message));
 
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
@@ -148,7 +154,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
             // Assert
             Assert.Equal(_message, exception.Message);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<ISaldoRepository>()
                 .Verify(x => x.Atualizar(It.IsAny<Saldo.Domain.Saldo>()), Times.Never);
             _mocker.GetMock<ISaldoRepository>()

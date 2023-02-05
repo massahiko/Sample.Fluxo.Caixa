@@ -1,4 +1,5 @@
 ﻿using Sample.Fluxo.Caixa.Core.Data;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Domain
 {
     public interface ILancamentoRepository : IRepository<Lancamento>
     {
-        Task<IEnumerable<Lancamento>> ObterTodos(bool asNoTracking = false);
+        Task<PagedResult<Lancamento>> ObterTodos(LancamentoFilter lancamentoFilter, bool asNoTracking = false);
         Task<Lancamento> ObterPorId(Guid id, bool asNoTracking = false);
 
         void Adicionar(Lancamento lancamento);

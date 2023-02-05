@@ -1,4 +1,5 @@
 ﻿using Sample.Fluxo.Caixa.API.Tests.Config;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System.Collections.Generic;
@@ -38,8 +39,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var result = JsonSerializer.Deserialize<ContaViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<ContaViewModel>(
+                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.Equal(contaViewModel.Descricao, result.Descricao);
         }
@@ -52,8 +54,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             response.EnsureSuccessStatusCode();
 
-            var contas = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var contas = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
             var contaAtualizar = contas.FirstOrDefault(n => n.Descricao == "CONTA TESTE INTEGRACAO");
 
@@ -65,8 +68,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var result = JsonSerializer.Deserialize<ContaViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<ContaViewModel>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.Equal(contaAtualizar.Descricao, result.Descricao);
         }
@@ -79,9 +83,11 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             response.EnsureSuccessStatusCode();
 
-            var contas = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-
+            var contas = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
+                                        
+                            
             var contaExcluir = contas.FirstOrDefault(n => n.Descricao == "CONTA ATUALIZAR TESTE INTEGRACAO");
 
             // Act
@@ -90,8 +96,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var result = JsonSerializer.Deserialize<bool>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<bool>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.True(result);
         }
@@ -104,9 +111,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             response.EnsureSuccessStatusCode();
 
-            var conta = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                        .FirstOrDefault();
+            var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
 
             // Act
@@ -115,8 +122,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var result = JsonSerializer.Deserialize<ContaViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<ContaViewModel>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.Equal(conta.Id, result.Id);
         }
@@ -129,9 +137,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             response.EnsureSuccessStatusCode();
 
-            var conta = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                        .FirstOrDefault();
+            var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
 
             // Act
@@ -140,8 +148,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var result = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
             Assert.All(result, result => Assert.Equal(conta.ContaTipo, result.ContaTipo));
         }

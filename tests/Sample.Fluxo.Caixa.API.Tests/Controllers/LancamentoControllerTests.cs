@@ -1,5 +1,6 @@
 ﻿using Sample.Fluxo.Caixa.API.Tests.Config;
 using Sample.Fluxo.Caixa.API.Tests.Result;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
 using Sample.FluxoCaixa.PlanoContas.Domain;
@@ -31,9 +32,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Arrange
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{ContaTipo.Receita.GetHashCode()}");
 
-            var conta = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                                            .FirstOrDefault();
+            var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             var lancamentoViewModel = new LancamentoViewModel()
             {
@@ -46,8 +47,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             response = await _testsFixture.Client.PostAsJsonAsync("Lancamento/Criar", lancamentoViewModel);
 
             // Assert
-            var result = JsonSerializer.Deserialize<LancamentoViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<LancamentoViewModel>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.NotNull(result);
         }
@@ -58,8 +60,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Arrange
             var response = await _testsFixture.Client.GetAsync("Lancamento/ObterTodos");
 
-            var lancamentos = JsonSerializer.Deserialize<IEnumerable<LancamentoViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var lancamentos = JsonSerializer.Deserialize<PagedResult<LancamentoViewModel>>(
+                                                await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
             var lancamentoAtualizar = lancamentos.FirstOrDefault();
 
@@ -69,8 +72,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             response = await _testsFixture.Client.PutAsJsonAsync($"Lancamento/Editar/{lancamentoAtualizar.Id}", lancamentoAtualizar);
 
             // Assert
-            var result = JsonSerializer.Deserialize<LancamentoViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<LancamentoViewModel>(
+                                                await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.Equal(lancamentoAtualizar.Valor, result.Valor);
         }
@@ -81,9 +85,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Arrange
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{ContaTipo.Receita.GetHashCode()}");
 
-            var conta = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                                            .FirstOrDefault();
+            var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                                await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             var lancamentoViewModel = new LancamentoViewModel()
             {
@@ -115,9 +119,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             response.EnsureSuccessStatusCode();
 
-            var lancamento = JsonSerializer.Deserialize<IEnumerable<LancamentoViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                        .FirstOrDefault();
+            var lancamento = JsonSerializer.Deserialize<PagedResult<LancamentoViewModel>>(
+                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
 
             // Act
@@ -126,8 +130,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var result = JsonSerializer.Deserialize<LancamentoViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<LancamentoViewModel>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.Equal(lancamento.Id, result.Id);
         }
@@ -137,9 +142,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         {
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{ContaTipo.SaldoInicial.GetHashCode()}");
 
-            var conta = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                                            .FirstOrDefault();
+            var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             var lancamentoViewModel = new LancamentoViewModel()
             {
@@ -158,8 +163,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             var mensage = "Existe lançamento de saldo inicial superior a data informada";
 
-            var result = JsonSerializer.Deserialize<ResultError>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<ResultError>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
             Assert.Contains(result.errors.Mensagens, n => n == mensage);
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using Sample.Fluxo.Caixa.PlanoContas.Application.Services;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
+using Sample.Fluxo.Caixa.PlanoContas.Domain;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
 using System.Threading.Tasks;
@@ -93,9 +94,9 @@ namespace Sample.Fluxo.Caixa.API.Controllers
         /// <response code="400">Os parâmetros não foram passados corretamente ou ocorreu algum erro inesperado durante a execução do método</response>
         /// <response code="500">Ops! Não foi possível obter lista de contas.</response>
         [HttpGet("ObterTodas")]
-        public async Task<IActionResult> ObterTodas()
+        public async Task<IActionResult> ObterTodas([FromQuery] ContaFilter contaFilter)
         {
-            return CustomResponse(await _contaAppService.ObterTodas());
+            return CustomResponse(await _contaAppService.ObterTodas(contaFilter));
         }
 
         /// <summary>

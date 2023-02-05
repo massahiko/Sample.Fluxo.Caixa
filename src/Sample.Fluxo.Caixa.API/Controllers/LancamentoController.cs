@@ -5,6 +5,7 @@ using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using Sample.Fluxo.Caixa.Lancamento.Application.Commands;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
+using Sample.Fluxo.Caixa.Lancamento.Domain;
 using System;
 using System.Threading.Tasks;
 
@@ -107,9 +108,9 @@ namespace Sample.Fluxo.Caixa.API.Controllers
         /// <response code="400">Os parâmetros não foram passados corretamente ou ocorreu algum erro inesperado durante a execução do método</response>
         /// <response code="500">Ops! Não foi possível obter lista de lançamentos.</response>
         [HttpGet("ObterTodos")]
-        public async Task<IActionResult> ObterTodos()
+        public async Task<IActionResult> ObterTodos([FromQuery] LancamentoFilter lancamentoFilter)
         {
-            return CustomResponse(await _lancamentoQueries.ObterTodos());
+            return CustomResponse(await _lancamentoQueries.ObterTodos(lancamentoFilter));
         }
 
         /// <summary>

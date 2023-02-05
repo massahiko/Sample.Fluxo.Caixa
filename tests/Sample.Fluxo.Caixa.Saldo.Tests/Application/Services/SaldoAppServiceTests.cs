@@ -68,20 +68,23 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             var saldosFakeViewModel = ObterListaSaldosViewModelFake();
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
-                .ReturnsAsync(saldosFake);
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Saldo.Domain.Saldo>()
+                {
+                    Data = saldosFake
+                });
 
             _mocker.GetMock<IMapper>()
                 .Setup(x => x.Map<IEnumerable<SaldoViewModel>>(saldosFake))
                 .Returns(saldosFakeViewModel);
 
             // Act
-            var result = await saldoAppService.ObterTodos();
+            var result = await saldoAppService.ObterTodos(It.IsAny<SaldoFilter>());
 
             // Assert
-            Assert.Equal(result, saldosFakeViewModel);
+            Assert.Equal(result.Data, saldosFakeViewModel);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                 .Verify(x => x.Map<IEnumerable<SaldoViewModel>>(saldosFake), Times.Once);
             _mocker.GetMock<ILogger<SaldoAppService>>()
@@ -99,16 +102,19 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             var saldoAppService = CriarSaldoAppService();
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
-                .ReturnsAsync(Enumerable.Empty<Saldo.Domain.Saldo>());
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Saldo.Domain.Saldo>()
+                {
+                    Data = Enumerable.Empty<Saldo.Domain.Saldo>()
+                });
 
             // Act
-            var result = await saldoAppService.ObterTodos();
+            var result = await saldoAppService.ObterTodos(It.IsAny<SaldoFilter>());
 
             // Assert
-            Assert.False(result.Any());
+            Assert.False(result.Data.Any());
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                  .Verify(x => x.Map<IEnumerable<SaldoViewModel>>(It.IsAny<Saldo.Domain.Saldo>()), Times.Never);
             _mocker.GetMock<ILogger<SaldoAppService>>()
@@ -126,17 +132,17 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             var saldoAppService = CriarSaldoAppService();
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
                 .Throws(new Exception(_message));
 
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
-                 await saldoAppService.ObterTodos()
+                 await saldoAppService.ObterTodos(It.IsAny<SaldoFilter>())
             );
 
             // Assert
             Assert.Equal(_message, exception.Message);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                 .Verify(x => x.Map<IEnumerable<SaldoViewModel>>(It.IsAny<Saldo.Domain.Saldo>()), Times.Never);
             _mocker.GetMock<ILogger<SaldoAppService>>()
@@ -335,9 +341,10 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             var saldosFake = ObterListaSaldosFake();
             var saldosFakeViewModel = ObterListaSaldosViewModelFake();
 
-            _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
-                .ReturnsAsync(saldosFake);
+            _mocker.GetMock<ISaldoRepository>().Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>())).ReturnsAsync(new Core.Pageable.PagedResult<Saldo.Domain.Saldo>()
+            {
+                Data = saldosFake
+            });
 
             // Act
             var result = await saldoAppService.GerarRelatorio();
@@ -345,7 +352,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             // Assert
             Assert.NotNull(result);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<ILogger<SaldoAppService>>()
                .Verify(x => x.Log(It.IsAny<LogLevel>(),
                                    It.IsAny<EventId>(),
@@ -361,9 +368,9 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             var saldoAppService = CriarSaldoAppService();
 
             _mocker.GetMock<ISaldoRepository>()
-                .Setup(x => x.ObterTodos())
+                .Setup(x => x.ObterTodos(It.IsAny<SaldoFilter>()))
                 .Throws(new Exception(_message));
-            
+
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
                  await saldoAppService.GerarRelatorio()
             );
@@ -371,7 +378,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Services
             // Assert
             Assert.Equal(_message, exception.Message);
             _mocker.GetMock<ISaldoRepository>()
-                .Verify(x => x.ObterTodos(), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<SaldoFilter>()), Times.Once);
             _mocker.GetMock<ILogger<SaldoAppService>>()
                .Verify(x => x.Log(It.IsAny<LogLevel>(),
                                    It.IsAny<EventId>(),

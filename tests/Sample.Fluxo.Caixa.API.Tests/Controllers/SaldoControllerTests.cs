@@ -2,6 +2,7 @@
 using Bogus;
 using Sample.Fluxo.Caixa.API.Tests.Config;
 using Sample.Fluxo.Caixa.API.Tests.Config.ViewModels;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
 using Sample.Fluxo.Caixa.Saldo.Application.ViewModels;
@@ -37,7 +38,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
                     ContaId = contaId,
                     DataEscrituracao = f.Date.Between(DateTime.Now.AddDays(contaTipo == ContaTipo.SaldoInicial ? 0 : 1),
                                                       DateTime.Now.AddDays(contaTipo == ContaTipo.SaldoInicial ? 0 : 6)),
-                    Valor = Math.Round(f.Random.Decimal(100, 600), 2),
+                    Valor = Math.Round(f.Random.Decimal(100, 100), 2),
                 })).Generate(total);
         }
 
@@ -45,9 +46,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         {
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{contaTipo}");
 
-            var conta = JsonSerializer.Deserialize<IEnumerable<ContaViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
-                                                            .FirstOrDefault();
+            var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             return conta;
         }
@@ -86,8 +87,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             });
 
 
-            var saldos = JsonSerializer.Deserialize<IEnumerable<SaldoViewModel>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var saldos = JsonSerializer.Deserialize<PagedResult<SaldoViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
             var saldoFinal = saldos.OrderByDescending(n => n.DataEscrituracao)
                                 .Select(n => n.SaldoFinal)
@@ -151,8 +153,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             var response = await _testsFixture.Client.GetAsync($"Saldo/ObterPorData/{lancamento.FirstOrDefault().DataEscrituracao.ToString("yyyy-MM-dd")}");
 
             // Assert
-            var saldo = JsonSerializer.Deserialize<SaldoViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var saldo = JsonSerializer.Deserialize<SaldoViewModel>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             Assert.NotNull(saldo);
         }
@@ -171,12 +174,14 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             {
                 var response = await _testsFixture.Client.GetAsync($"Saldo/ObterPorData/{item.DataEscrituracao.ToString("yyyy-MM-dd")}");
 
-                var saldo = JsonSerializer.Deserialize<SaldoViewModel>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var saldo = JsonSerializer.Deserialize<SaldoViewModel>(
+                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 response = await _testsFixture.Client.DeleteAsync($"Saldo/Excluir/{saldo.Id}");
 
-                var result = JsonSerializer.Deserialize<bool>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                                                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<bool>(
+                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 Assert.True(result);
             }

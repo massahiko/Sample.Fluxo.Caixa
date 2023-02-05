@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
+using Sample.Fluxo.Caixa.Core.Pageable;
+using System.Collections;
+using Sample.Fluxo.Caixa.PlanoContas.Domain;
 
 namespace Sample.Fluxo.Caixa.PlanoContas.Application.Services
 {
@@ -29,13 +32,13 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ContaViewModel>> ObterPorTipo(ContaTipo contaTipo)
+        public async Task<PagedResult<ContaViewModel>> ObterPorTipo(ContaTipo contaTipo)
         {
             try
             {
                 _logger.LogInformation($"Obtendo contas por tipo: {contaTipo}");
 
-                return _mapper.Map<IEnumerable<ContaViewModel>>(await _contaRepository.ObterPorTipo(contaTipo));
+                return await ObterTodas(new ContaFilter { ContaTipo = contaTipo });
             }
             catch (Exception)
             {
@@ -65,13 +68,21 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Application.Services
             }
         }
 
-        public async Task<IEnumerable<ContaViewModel>> ObterTodas()
+        public async Task<PagedResult<ContaViewModel>> ObterTodas(ContaFilter contaFilter)
         {
             try
             {
                 _logger.LogInformation($"Obtendo lista de contas");
 
-                return _mapper.Map<IEnumerable<ContaViewModel>>(await _contaRepository.ObterTodas());
+                var result = await _contaRepository.ObterTodas(contaFilter);
+
+                return new PagedResult<ContaViewModel>()
+                {
+                    Data = _mapper.Map<IEnumerable<ContaViewModel>>(result.Data),
+                    TotalResults = result.TotalResults,
+                    Page = result.Page,
+                    Size = result.Size,
+                };
             }
             catch (Exception)
             {

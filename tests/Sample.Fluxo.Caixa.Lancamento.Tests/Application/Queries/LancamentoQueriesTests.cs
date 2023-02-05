@@ -12,6 +12,7 @@ using Sample.Fluxo.Caixa.Core.Data.EventSourcing;
 using System.Linq;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
 using AutoMapper;
+using Sample.Fluxo.Caixa.Core.Pageable;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Queries
 {
@@ -162,24 +163,27 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Queries
         {
             // Arrange
             var LancamentoQueries = CriarLancamentoQueries();
-            var lancamentosFake = ObterListaLancamentosFake().OrderBy(p => p.DataEscrituracao);
+            var lancamentosFake = ObterListaLancamentosFake();
             var lancamentosFakeViewModel = ObterListaLancamentosViewModelFake().OrderBy(p => p.DataEscrituracao);
 
             _mocker.GetMock<ILancamentoRepository>()
-                .Setup(x => x.ObterTodos(It.IsAny<bool>()))
-                .ReturnsAsync(lancamentosFake);
+                .Setup(x => x.ObterTodos(It.IsAny<LancamentoFilter>(), It.IsAny<bool>()))
+                .ReturnsAsync(new PagedResult<Lancamento.Domain.Lancamento>()
+                {
+                    Data = lancamentosFake
+                });
 
             _mocker.GetMock<IMapper>()
                 .Setup(x => x.Map<IEnumerable<LancamentoViewModel>>(lancamentosFake))
                 .Returns(lancamentosFakeViewModel);
 
             // Act
-            var result = await LancamentoQueries.ObterTodos();
+            var result = await LancamentoQueries.ObterTodos(It.IsAny<LancamentoFilter>());
 
             // Assert
-            Assert.Equal(result, lancamentosFakeViewModel);
+            Assert.Equal(result.Data, lancamentosFakeViewModel);
             _mocker.GetMock<ILancamentoRepository>()
-                .Verify(x => x.ObterTodos(It.IsAny<bool>()), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<LancamentoFilter>(), It.IsAny<bool>()), Times.Once);
             _mocker.GetMock<IMapper>()
                 .Verify(x => x.Map<IEnumerable<LancamentoViewModel>>(lancamentosFake), Times.Once);
             _mocker.GetMock<ILogger<LancamentoQueries>>()
@@ -197,16 +201,19 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Queries
             var LancamentoQueries = CriarLancamentoQueries();
 
             _mocker.GetMock<ILancamentoRepository>()
-                .Setup(x => x.ObterTodos(It.IsAny<bool>()))
-                .ReturnsAsync(Enumerable.Empty<Lancamento.Domain.Lancamento>());
+                .Setup(x => x.ObterTodos(It.IsAny<LancamentoFilter>(), It.IsAny<bool>()))
+                .ReturnsAsync(new PagedResult<Lancamento.Domain.Lancamento>()
+                {
+                    Data = Enumerable.Empty<Lancamento.Domain.Lancamento>()
+                });
 
             // Act
-            var result = await LancamentoQueries.ObterTodos();
+            var result = await LancamentoQueries.ObterTodos(It.IsAny<LancamentoFilter>());
 
             // Assert
-            Assert.False(result.Any());
+            Assert.False(result.Data.Any());
             _mocker.GetMock<ILancamentoRepository>()
-                .Verify(x => x.ObterTodos(It.IsAny<bool>()), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<LancamentoFilter>(), It.IsAny<bool>()), Times.Once);
             _mocker.GetMock<IMapper>()
                  .Verify(x => x.Map<IEnumerable<LancamentoViewModel>>(It.IsAny<Lancamento.Domain.Lancamento>()), Times.Never);
             _mocker.GetMock<ILogger<LancamentoQueries>>()
@@ -224,17 +231,17 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Queries
             var LancamentoQueries = CriarLancamentoQueries();
 
             _mocker.GetMock<ILancamentoRepository>()
-                .Setup(x => x.ObterTodos(It.IsAny<bool>()))
+                .Setup(x => x.ObterTodos(It.IsAny<LancamentoFilter>(), It.IsAny<bool>()))
                 .Throws(new Exception(_message));
 
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
-                 await LancamentoQueries.ObterTodos()
+                 await LancamentoQueries.ObterTodos(It.IsAny<LancamentoFilter>())
             );
 
             // Assert
             Assert.Equal(_message, exception.Message);
             _mocker.GetMock<ILancamentoRepository>()
-                .Verify(x => x.ObterTodos(It.IsAny<bool>()), Times.Once);
+                .Verify(x => x.ObterTodos(It.IsAny<LancamentoFilter>(), It.IsAny<bool>()), Times.Once);
             _mocker.GetMock<IMapper>()
                 .Verify(x => x.Map<IEnumerable<LancamentoViewModel>>(It.IsAny<Lancamento.Domain.Lancamento>()), Times.Never);
             _mocker.GetMock<ILogger<LancamentoQueries>>()

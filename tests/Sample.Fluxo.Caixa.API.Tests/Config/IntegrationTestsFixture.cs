@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.Saldo.Application.ViewModels;
 using Sample.FluxoCaixa.PlanoContas.Domain;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Xunit;
 
@@ -38,12 +40,13 @@ namespace Sample.Fluxo.Caixa.API.Tests.Config
 
         public void ExcluirTodosLancamentos()
         {
-            var response = Client.GetAsync($"Lancamento/ObterTodos").Result;
+            var response = Client.GetAsync($"Lancamento/ObterTodos?Size=200").Result;
 
             response.EnsureSuccessStatusCode();
 
-            var lancamentos = JsonSerializer.Deserialize<IEnumerable<LancamentoViewModel>>(response.Content.ReadAsStringAsync().Result,
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var lancamentos = JsonSerializer.Deserialize<PagedResult<LancamentoViewModel>>(response.Content.ReadAsStringAsync().Result,
+                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
+                                            .Data;
 
 
             foreach (var item in lancamentos)
@@ -54,12 +57,13 @@ namespace Sample.Fluxo.Caixa.API.Tests.Config
 
         public void ExcluirTodosSaldos()
         {
-            var response = Client.GetAsync($"Saldo/ObterTodos").Result;
+            var response = Client.GetAsync($"Saldo/ObterTodos?Size=200").Result;
 
             response.EnsureSuccessStatusCode();
 
-            var saldos = JsonSerializer.Deserialize<IEnumerable<SaldoViewModel>>(response.Content.ReadAsStringAsync().Result,
-                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var saldos = JsonSerializer.Deserialize<PagedResult<SaldoViewModel>>(response.Content.ReadAsStringAsync().Result,
+                                                                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })
+                                        .Data;
 
 
             foreach (var item in saldos)

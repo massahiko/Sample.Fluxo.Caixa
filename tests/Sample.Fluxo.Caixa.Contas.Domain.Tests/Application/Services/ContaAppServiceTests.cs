@@ -6,8 +6,10 @@ using Moq.AutoMock;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.DomainObjects;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
+using Sample.Fluxo.Caixa.Lancamento.Domain;
 using Sample.Fluxo.Caixa.PlanoContas.Application.Services;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
+using Sample.Fluxo.Caixa.PlanoContas.Domain;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
 using System.Collections.Generic;
@@ -67,8 +69,8 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var contasFakeViewModel = ObterListaContasViewModelFake();
 
             _mocker.GetMock<IContaRepository>()
-                .Setup(x => x.ObterPorTipo(It.IsAny<ContaTipo>()))
-                .ReturnsAsync(contasFake);
+                .Setup(x => x.ObterTodas(It.IsAny<ContaFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Conta> { Data = contasFake });
 
             _mocker.GetMock<IMapper>()
                 .Setup(x => x.Map<IEnumerable<ContaViewModel>>(contasFake))
@@ -78,9 +80,9 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var result = await contaAppService.ObterPorTipo(ContaTipo.Receita);
 
             // Assert
-            Assert.Equal(result, contasFakeViewModel);
+            Assert.Equal(result.Data, contasFakeViewModel);
             _mocker.GetMock<IContaRepository>()
-                .Verify(x => x.ObterPorTipo(It.IsAny<ContaTipo>()), Times.Once);
+                .Verify(x => x.ObterTodas(It.IsAny<ContaFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                  .Verify(x => x.Map<IEnumerable<ContaViewModel>>(contasFake), Times.Once);
             _mocker.GetMock<ILogger<ContaAppService>>()
@@ -88,7 +90,7 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
                                    It.IsAny<EventId>(),
                                    It.Is<It.IsAnyType>((v, t) => true),
                                    It.IsAny<Exception>(),
-                                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
+                                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Exactly(2));
         }
 
         [Fact]
@@ -98,16 +100,19 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var contaAppService = CriarContaAppService();
 
             _mocker.GetMock<IContaRepository>()
-                .Setup(x => x.ObterPorTipo(It.IsAny<ContaTipo>()))
-                .ReturnsAsync(Enumerable.Empty<Conta>());
+                .Setup(x => x.ObterTodas(It.IsAny<ContaFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Conta>()
+                {
+                    Data = Enumerable.Empty<Conta>()
+                });
 
             // Act
             var result = await contaAppService.ObterPorTipo(ContaTipo.Receita);
 
             // Assert
-            Assert.False(result.Any());
+            Assert.False(result.Data.Any());
             _mocker.GetMock<IContaRepository>()
-                .Verify(x => x.ObterPorTipo(It.IsAny<ContaTipo>()), Times.Once);
+                .Verify(x => x.ObterTodas(It.IsAny<ContaFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                  .Verify(x => x.Map<IEnumerable<ContaViewModel>>(It.IsAny<Conta>()), Times.Never);
             _mocker.GetMock<ILogger<ContaAppService>>()
@@ -115,7 +120,7 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
                                    It.IsAny<EventId>(),
                                    It.Is<It.IsAnyType>((v, t) => true),
                                    It.IsAny<Exception>(),
-                                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
+                                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Exactly(2));
         }
 
         [Fact]
@@ -125,7 +130,7 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var contaAppService = CriarContaAppService();
 
             _mocker.GetMock<IContaRepository>()
-                .Setup(x => x.ObterPorTipo(It.IsAny<ContaTipo>()))
+                .Setup(x => x.ObterTodas(It.IsAny<ContaFilter>()))
                 .Throws(new Exception(_message));
 
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
@@ -135,7 +140,7 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             // Assert
             Assert.Equal(_message, exception.Message);
             _mocker.GetMock<IContaRepository>()
-                .Verify(x => x.ObterPorTipo(It.IsAny<ContaTipo>()), Times.Once);
+                .Verify(x => x.ObterTodas(It.IsAny<ContaFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                  .Verify(x => x.Map<IEnumerable<ContaViewModel>>(It.IsAny<Conta>()), Times.Never);
             _mocker.GetMock<ILogger<ContaAppService>>()
@@ -143,7 +148,7 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
                                    It.IsAny<EventId>(),
                                    It.Is<It.IsAnyType>((v, t) => true),
                                    It.IsAny<Exception>(),
-                                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Exactly(2));
+                                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Exactly(4));
         }
 
         #endregion
@@ -249,20 +254,23 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var contasFakeViewModel = ObterListaContasViewModelFake();
 
             _mocker.GetMock<IContaRepository>()
-                .Setup(x => x.ObterTodas())
-                .ReturnsAsync(contasFake);
+                .Setup(x => x.ObterTodas(It.IsAny<ContaFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Conta>()
+                {
+                    Data = contasFake
+                });
 
             _mocker.GetMock<IMapper>()
                 .Setup(x => x.Map<IEnumerable<ContaViewModel>>(contasFake))
                 .Returns(contasFakeViewModel);
 
             // Act
-            var result = await contaAppService.ObterTodas();
+            var result = await contaAppService.ObterTodas(It.IsAny<ContaFilter>());
 
             // Assert
-            Assert.Equal(result, contasFakeViewModel);
+            Assert.Equal(result.Data, contasFakeViewModel);
             _mocker.GetMock<IContaRepository>()
-                .Verify(x => x.ObterTodas(), Times.Once);
+                .Verify(x => x.ObterTodas(It.IsAny<ContaFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                 .Verify(x => x.Map<IEnumerable<ContaViewModel>>(contasFake), Times.Once);
             _mocker.GetMock<ILogger<ContaAppService>>()
@@ -280,16 +288,19 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var contaAppService = CriarContaAppService();
 
             _mocker.GetMock<IContaRepository>()
-                .Setup(x => x.ObterTodas())
-                .ReturnsAsync(Enumerable.Empty<Conta>());
+                .Setup(x => x.ObterTodas(It.IsAny<ContaFilter>()))
+                .ReturnsAsync(new Core.Pageable.PagedResult<Conta>()
+                {
+                    Data = Enumerable.Empty<Conta>()
+                });
 
             // Act
-            var result = await contaAppService.ObterTodas();
+            var result = await contaAppService.ObterTodas(It.IsAny<ContaFilter>());
 
             // Assert
-            Assert.False(result.Any());
+            Assert.False(result.Data.Any());
             _mocker.GetMock<IContaRepository>()
-                .Verify(x => x.ObterTodas(), Times.Once);
+                .Verify(x => x.ObterTodas(It.IsAny<ContaFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                  .Verify(x => x.Map<IEnumerable<ContaViewModel>>(It.IsAny<Conta>()), Times.Never);
             _mocker.GetMock<ILogger<ContaAppService>>()
@@ -307,17 +318,17 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Application.Services
             var contaAppService = CriarContaAppService();
 
             _mocker.GetMock<IContaRepository>()
-                .Setup(x => x.ObterTodas())
+                .Setup(x => x.ObterTodas(It.IsAny<ContaFilter>()))
                 .Throws(new Exception(_message));
 
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
-                 await contaAppService.ObterTodas()
+                 await contaAppService.ObterTodas(It.IsAny<ContaFilter>())
             );
 
             // Assert
             Assert.Equal(_message, exception.Message);
             _mocker.GetMock<IContaRepository>()
-                .Verify(x => x.ObterTodas(), Times.Once);
+                .Verify(x => x.ObterTodas(It.IsAny<ContaFilter>()), Times.Once);
             _mocker.GetMock<IMapper>()
                 .Verify(x => x.Map<IEnumerable<ContaViewModel>>(It.IsAny<Conta>()), Times.Never);
             _mocker.GetMock<ILogger<ContaAppService>>()

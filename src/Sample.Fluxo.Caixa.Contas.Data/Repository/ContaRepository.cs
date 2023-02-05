@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sample.Fluxo.Caixa.Core.Data;
+using Sample.Fluxo.Caixa.Core.Pageable;
+using Sample.Fluxo.Caixa.PlanoContas.Domain;
 using Sample.FluxoCaixa.PlanoContas.Data;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,20 +36,33 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Data.Repository
             _context.Contas.Remove(conta);
         }
 
-        public async Task<IEnumerable<Conta>> ObterTodas()
+        public async Task<PagedResult<Conta>> ObterTodas(ContaFilter contaFilter)
         {
-            return await _context.Contas.AsNoTracking().ToListAsync();
+            var contas = await _context.Contas.AsNoTracking()
+                .Skip(contaFilter.Skip)
+                .Take(contaFilter.Size)
+                .Where(contaFilter.Build())
+                .ToListAsync();
+
+            return new PagedResult<Conta>()
+            {
+                Data = contas, 
+                TotalResults = await ObterTotal(contaFilter),
+                Page = contaFilter.Page,
+                Size = contaFilter.Size,
+            };
+        }
+
+        private async Task<int> ObterTotal(ContaFilter contaFilter)
+        {
+            return await _context.Contas.AsNoTracking()
+                .Where(contaFilter.Build())
+                .CountAsync();
         }
 
         public async Task<Conta> ObterPorId(Guid id)
         {
             return await _context.Contas.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
-        }
-
-        public async Task<IEnumerable<Conta>> ObterPorTipo(ContaTipo contaTipo)
-        {
-            return await _context.Contas.AsNoTracking().Where(c => c.ContaTipo == contaTipo).ToListAsync();
-
         }
 
         public void Dispose()
