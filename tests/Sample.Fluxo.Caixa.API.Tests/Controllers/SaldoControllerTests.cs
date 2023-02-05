@@ -47,7 +47,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{contaTipo}");
 
             var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
-                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             return conta;
@@ -57,7 +57,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         public async Task SaldoController_ObterTodos_DeveRetornarComSucesso()
         {
             // Arrange
-            _testsFixture.ExcluirTodosSaldos();
+            _testsFixture.ExcluirTudo();
 
             var lancamentosFake = (await ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1)).ToList();
             lancamentosFake.AddRange(await ObterListaLancamentosFake(ContaTipo.Receita, 4));
@@ -88,7 +88,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
 
             var saldos = JsonSerializer.Deserialize<PagedResult<SaldoViewModel>>(
-                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
             var saldoFinal = saldos.OrderByDescending(n => n.DataEscrituracao)
@@ -102,7 +102,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         public async Task SaldoController_GerarRelatorio_DeveRetornarComSucesso()
         {
             // Arrange
-            _testsFixture.ExcluirTodosSaldos();
+            _testsFixture.ExcluirTudo();
 
             var lancamentosFake = (await ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1)).ToList();
             lancamentosFake.AddRange(await ObterListaLancamentosFake(ContaTipo.Receita, 4));
@@ -164,13 +164,15 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         public async Task SaldoController_Excluir_DeveRetornarComSucesso()
         {
             // Arrange
+            _testsFixture.ExcluirTudo();
+
             var lancamentos = (await ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1)).Select(n => n.Item2).ToList();
             lancamentos.AddRange((await ObterListaLancamentosFake(ContaTipo.Receita, 1)).Select(n => n.Item2));
             lancamentos.AddRange((await ObterListaLancamentosFake(ContaTipo.Despesa, 1)).Select(n => n.Item2));
             _testsFixture.AdicionarLancamentos(lancamentos);
 
             // Act & Assert
-            foreach (var item in lancamentos)
+            foreach (var item in lancamentos.GroupBy(n => n.DataEscrituracao).SelectMany(n => n))
             {
                 var response = await _testsFixture.Client.GetAsync($"Saldo/ObterPorData/{item.DataEscrituracao.ToString("yyyy-MM-dd")}");
 

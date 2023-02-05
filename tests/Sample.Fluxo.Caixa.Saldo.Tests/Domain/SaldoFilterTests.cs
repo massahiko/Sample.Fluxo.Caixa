@@ -23,7 +23,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
 
             // Assert
             var textFilter = new StringBuilder($"x => (((True AndAlso (x.Id == value({typeof(SaldoFilter).FullName}).Id)) AndAlso");
-            textFilter.Append($" (Convert(x.DataCadastro, Nullable`1) == value({typeof(SaldoFilter).FullName}).DataCadastro))")
+            textFilter.Append($" (Convert(x.DataEscrituracao, Nullable`1) == value({typeof(SaldoFilter).FullName}).DataEscrituracao))")
                       .Append($" AndAlso (Convert(x.DataCadastro, Nullable`1) == value({typeof(SaldoFilter).FullName}).DataCadastro))");
 
             Assert.Equal(textFilter.ToString(), result.ToString());

@@ -34,6 +34,11 @@ namespace Sample.Fluxo.Caixa.API.Tests.Config
             Factory = new AppFactory<TStartup>();
             Client = Factory.CreateClient(clientOptions);
 
+            ExcluirTudo();
+        }
+
+        public void ExcluirTudo()
+        {
             ExcluirTodosSaldos();
             ExcluirTodosLancamentos();
         }

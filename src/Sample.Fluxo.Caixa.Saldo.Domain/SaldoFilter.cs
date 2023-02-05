@@ -18,8 +18,8 @@ namespace Sample.Fluxo.Caixa.Saldo.Domain
             if (Id != Guid.Empty)
                 filter = filter.And(x => x.Id == Id);
 
-            if (DataCadastro.HasValue)
-                filter = filter.And(x => x.DataCadastro == DataCadastro);
+            if (DataEscrituracao.HasValue)
+                filter = filter.And(x => x.DataEscrituracao == DataEscrituracao);
 
             if (DataCadastro.HasValue)
                 filter = filter.And(x => x.DataCadastro == DataCadastro);
