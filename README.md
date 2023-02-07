@@ -12,7 +12,7 @@ Testes unitários e de integração devidamente implementados
 
 # Desenho da Solução
 
-![fluxo-de-caixa-diagram](https://user-images.githubusercontent.com/38221988/216742061-2428c595-2fe2-4649-a216-532263b9d380.png)
+![fluxo-de-caixa-diagram](https://user-images.githubusercontent.com/38221988/217388285-6268f3d5-b247-446e-9da8-62b9832f85cd.jpg)
 
 * **Server Side**: ASP.NET Core
 
