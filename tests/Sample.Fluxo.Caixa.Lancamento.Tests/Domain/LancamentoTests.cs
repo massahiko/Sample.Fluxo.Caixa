@@ -1,9 +1,5 @@
 ﻿using Sample.Fluxo.Caixa.Core.DomainObjects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Tests.Domain

@@ -28,7 +28,7 @@ namespace Sample.Fluxo.Caixa.API.Controllers
         /// <param name="lancamentoQueries"></param>
         public LancamentoController(
             INotificationHandler<DomainNotification> notifications,
-            IMediatorHandler mediatorHandler, 
+            IMediatorHandler mediatorHandler,
             ILancamentoQueries lancamentoQueries) : base(notifications)
         {
             _mediatorHandler = mediatorHandler;
@@ -93,7 +93,7 @@ namespace Sample.Fluxo.Caixa.API.Controllers
         public async Task<IActionResult> Excluir(Guid lancamentoId)
         {
             var command = new ExcluirLancamentoCommand(lancamentoId);
-            
+
             return CustomResponse(await _mediatorHandler.EnviarComando(command));
         }
 

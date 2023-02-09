@@ -6,7 +6,6 @@ using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Application.Queries

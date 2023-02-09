@@ -1,18 +1,8 @@
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Sample.Fluxo.Caixa.API.Configuration;
-using Sample.Fluxo.Caixa.Lancamento.Application.AutoMapper;
-using Sample.Fluxo.Caixa.Lancamento.Application.Commands;
-using Sample.Fluxo.Caixa.PlanoContas.Application.AutoMapper;
-using Sample.Fluxo.Caixa.Saldo.Application.AutoMapper;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Sample.Fluxo.Caixa.API
 {

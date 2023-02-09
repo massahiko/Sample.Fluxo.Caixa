@@ -1,6 +1,5 @@
 ﻿using Sample.Fluxo.Caixa.Core.DomainObjects;
 using System;
-using System.Drawing;
 
 namespace Sample.Fluxo.Caixa.Saldo.Domain
 {

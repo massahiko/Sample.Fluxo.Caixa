@@ -1,18 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Bogus;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.AutoMock;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Lancamento;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Saldo;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
+using Sample.FluxoCaixa.PlanoContas.Domain;
 using Sample.FluxoCaixa.PlanoContas.Domain.Events;
 using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Xunit;
-using Sample.FluxoCaixa.PlanoContas.Domain;
-using Bogus;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Sample.Fluxo.Caixa.PlanoContas.Tests.Domain.Events
 {

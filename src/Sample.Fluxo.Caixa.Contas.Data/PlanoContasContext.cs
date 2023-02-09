@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sample.Fluxo.Caixa.Core.Data;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
-using Sample.FluxoCaixa.PlanoContas.Domain;
 using Sample.Fluxo.Caixa.Core.Messages;
+using Sample.FluxoCaixa.PlanoContas.Domain;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sample.FluxoCaixa.PlanoContas.Data
 {
@@ -17,7 +17,7 @@ namespace Sample.FluxoCaixa.PlanoContas.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");

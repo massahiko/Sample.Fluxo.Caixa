@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
-using System.Collections.Generic;
 
 namespace Sample.Fluxo.Caixa.PlanoContas.Data.Mappings
 {

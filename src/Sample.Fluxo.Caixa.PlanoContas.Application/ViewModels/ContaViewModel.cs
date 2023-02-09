@@ -1,12 +1,11 @@
 ﻿using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels
 {
     public class ContaViewModel
-    {        
+    {
         public Guid Id { get; set; }
 
         public string Descricao { get; set; }

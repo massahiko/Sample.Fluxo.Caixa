@@ -46,7 +46,7 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Data.Repository
 
             return new PagedResult<Conta>()
             {
-                Data = contas, 
+                Data = contas,
                 TotalResults = await ObterTotal(contaFilter),
                 Page = contaFilter.Page,
                 Size = contaFilter.Size,

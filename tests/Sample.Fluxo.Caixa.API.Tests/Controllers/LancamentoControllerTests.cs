@@ -5,7 +5,6 @@ using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -86,7 +85,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{ContaTipo.Receita.GetHashCode()}");
 
             var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
-                                                await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                                await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             var lancamentoViewModel = new LancamentoViewModel()
@@ -120,7 +119,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             response.EnsureSuccessStatusCode();
 
             var lancamento = JsonSerializer.Deserialize<PagedResult<LancamentoViewModel>>(
-                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                             new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
 
@@ -143,7 +142,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             var response = await _testsFixture.Client.GetAsync($"Conta/ObterPorTipo/{ContaTipo.SaldoInicial.GetHashCode()}");
 
             var conta = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
-                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false), 
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data.FirstOrDefault();
 
             var lancamentoViewModel = new LancamentoViewModel()

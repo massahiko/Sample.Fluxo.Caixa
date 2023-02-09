@@ -22,10 +22,45 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
     public class SaldoControllerTests
     {
         private readonly IntegrationTestsFixture<StartupTests> _testsFixture;
+        private List<Tuple<ContaTipo, LancamentoViewModel>> _lancamentosFake;
+        private decimal _totalSaldoFake;
 
         public SaldoControllerTests(IntegrationTestsFixture<StartupTests> testsFixture)
         {
             _testsFixture = testsFixture;
+            PopularLancamentosFake();
+            AtualizarTotalSaldosFake();
+        }
+
+        private void AtualizarTotalSaldosFake()
+        {
+            _totalSaldoFake = 0m;
+            _lancamentosFake.ForEach(n =>
+            {
+                switch (n.Item1)
+                {
+                    case ContaTipo.SaldoInicial:
+                    case ContaTipo.Receita:
+                        _totalSaldoFake += n.Item2.Valor;
+                        break;
+                    case ContaTipo.Despesa:
+                        _totalSaldoFake -= n.Item2.Valor;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+        private void PopularLancamentosFake()
+        {
+            _testsFixture.ExcluirTudo();
+
+            _lancamentosFake = (ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1).Result).ToList();
+            _lancamentosFake.AddRange(ObterListaLancamentosFake(ContaTipo.Receita, 4).Result);
+            _lancamentosFake.AddRange(ObterListaLancamentosFake(ContaTipo.Despesa, 3).Result);
+
+            _testsFixture.AdicionarLancamentos(_lancamentosFake.Select(n => n.Item2));
         }
 
         private async Task<IEnumerable<Tuple<ContaTipo, LancamentoViewModel>>> ObterListaLancamentosFake(ContaTipo contaTipo, int total = 10)
@@ -56,37 +91,10 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         [Fact, TestPriority(1)]
         public async Task SaldoController_ObterTodos_DeveRetornarComSucesso()
         {
-            // Arrange
-            _testsFixture.ExcluirTudo();
-
-            var lancamentosFake = (await ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1)).ToList();
-            lancamentosFake.AddRange(await ObterListaLancamentosFake(ContaTipo.Receita, 4));
-            lancamentosFake.AddRange(await ObterListaLancamentosFake(ContaTipo.Despesa, 3));
-
-            _testsFixture.AdicionarLancamentos(lancamentosFake.Select(n => n.Item2));
-
-            // Act
+            // Arrange & Act
             var response = await _testsFixture.Client.GetAsync("Saldo/ObterTodos");
 
             // Assert
-            var totalSaldo = 0m;
-            lancamentosFake.ForEach(n =>
-            {
-                switch (n.Item1)
-                {
-                    case ContaTipo.SaldoInicial:
-                    case ContaTipo.Receita:
-                        totalSaldo += n.Item2.Valor;
-                        break;
-                    case ContaTipo.Despesa:
-                        totalSaldo -= n.Item2.Valor;
-                        break;
-                    default:
-                        break;
-                }
-            });
-
-
             var saldos = JsonSerializer.Deserialize<PagedResult<SaldoViewModel>>(
                                         await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
@@ -95,22 +103,13 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
                                 .Select(n => n.SaldoFinal)
                                 .FirstOrDefault();
 
-            Assert.Equal(totalSaldo, saldoFinal);
+            Assert.Equal(_totalSaldoFake, saldoFinal);
         }
 
         [Fact, TestPriority(2)]
         public async Task SaldoController_GerarRelatorio_DeveRetornarComSucesso()
         {
-            // Arrange
-            _testsFixture.ExcluirTudo();
-
-            var lancamentosFake = (await ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1)).ToList();
-            lancamentosFake.AddRange(await ObterListaLancamentosFake(ContaTipo.Receita, 3));
-            lancamentosFake.AddRange(await ObterListaLancamentosFake(ContaTipo.Despesa, 3));
-
-            _testsFixture.AdicionarLancamentos(lancamentosFake.Select(n => n.Item2));
-
-            // Act
+            // Arrange & Act
             var response = await _testsFixture.Client.GetAsync("Saldo/GerarRelatorio");
 
             // Assert
@@ -119,7 +118,12 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
 
             var saldos = CsvHelperTest.ConverterRelatorioParaObjeto<RelatorioSaldoConsolidadoViewModel>(arquivo);
             File.Delete(arquivo);
-            Assert.True(saldos.Any());
+
+            var saldoFinal = saldos.OrderByDescending(n => n.Data)
+                                .Select(n => n.SaldoFinal)
+                                .FirstOrDefault();
+
+            Assert.Equal(_totalSaldoFake, decimal.Parse(saldoFinal));
         }
 
         [Fact, TestPriority(3)]
@@ -141,22 +145,16 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
         [Fact, TestPriority(4)]
         public async Task SaldoController_Excluir_DeveRetornarComSucesso()
         {
-            // Arrange
-            _testsFixture.ExcluirTudo();
+            // Arrange 
+            var response = await _testsFixture.Client.GetAsync("Saldo/ObterTodos");
 
-            var lancamentos = (await ObterListaLancamentosFake(ContaTipo.SaldoInicial, 1)).Select(n => n.Item2).ToList();
-            lancamentos.AddRange((await ObterListaLancamentosFake(ContaTipo.Receita, 1)).Select(n => n.Item2));
-            lancamentos.AddRange((await ObterListaLancamentosFake(ContaTipo.Despesa, 1)).Select(n => n.Item2));
-            _testsFixture.AdicionarLancamentos(lancamentos);
+            var saldos = JsonSerializer.Deserialize<PagedResult<SaldoViewModel>>(
+                                        await response.Content.ReadAsStringAsync().ConfigureAwait(false),
+                                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
             // Act & Assert
-            foreach (var item in lancamentos.GroupBy(n => n.DataEscrituracao).SelectMany(n => n))
+            foreach (var saldo in saldos)
             {
-                var response = await _testsFixture.Client.GetAsync($"Saldo/ObterPorData/{item.DataEscrituracao.ToString("yyyy-MM-dd")}");
-
-                var saldo = JsonSerializer.Deserialize<SaldoViewModel>(
-                                            await response.Content.ReadAsStringAsync().ConfigureAwait(false),
-                                            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 response = await _testsFixture.Client.DeleteAsync($"Saldo/Excluir/{saldo.Id}");
 
                 var result = JsonSerializer.Deserialize<bool>(

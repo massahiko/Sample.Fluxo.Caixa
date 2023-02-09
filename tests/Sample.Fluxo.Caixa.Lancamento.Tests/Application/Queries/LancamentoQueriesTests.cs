@@ -1,18 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Bogus;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.AutoMock;
-using Sample.Fluxo.Caixa.Lancamento.Application.Queries;
-using System.Threading.Tasks;
-using System;
-using Xunit;
-using System.Collections.Generic;
-using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
-using Bogus;
 using Sample.Fluxo.Caixa.Core.Data.EventSourcing;
-using System.Linq;
-using Sample.Fluxo.Caixa.Lancamento.Domain;
-using AutoMapper;
 using Sample.Fluxo.Caixa.Core.Pageable;
+using Sample.Fluxo.Caixa.Lancamento.Application.Queries;
+using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
+using Sample.Fluxo.Caixa.Lancamento.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Queries
 {

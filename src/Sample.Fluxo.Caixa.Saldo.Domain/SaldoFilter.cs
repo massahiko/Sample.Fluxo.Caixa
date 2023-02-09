@@ -1,7 +1,7 @@
-﻿using Sample.Fluxo.Caixa.Core.Pageable;
-using System.Linq.Expressions;
+﻿using Sample.Fluxo.Caixa.Core.Extensions;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using System;
-using Sample.Fluxo.Caixa.Core.Extensions;
+using System.Linq.Expressions;
 
 namespace Sample.Fluxo.Caixa.Saldo.Domain
 {

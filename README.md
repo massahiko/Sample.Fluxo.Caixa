@@ -36,3 +36,4 @@ Techs:
   * Abrir pasta
   * Abrir terminal
   * Executar docker-compose up --build
+  * Aguardar atualização do banco 'FluxoCaixaDB'

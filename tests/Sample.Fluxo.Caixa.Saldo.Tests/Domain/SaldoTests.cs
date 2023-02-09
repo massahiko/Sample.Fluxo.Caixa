@@ -9,8 +9,8 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
         [Theory]
         [InlineData("2023-01-01", 10, 20)]
         public void Saldo_CriarEntidade_DeveCriarComSucesso(
-            DateTime dateEscrituracao, 
-            decimal receita, 
+            DateTime dateEscrituracao,
+            decimal receita,
             decimal despesa)
         {
             // Arrange & Act
@@ -25,9 +25,9 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
         [Theory]
         [InlineData("2023-01-01", 10, 20, 100)]
         public void Saldo_AtualizarSaldoInicial_DeveAtualizarComSucessoAcumulando(
-            DateTime dateEscrituracao, 
-            decimal receita, 
-            decimal despesa, 
+            DateTime dateEscrituracao,
+            decimal receita,
+            decimal despesa,
             decimal saldoInicial)
         {
             // Arrange & Act
@@ -90,7 +90,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Domain
 
             // Assert
             Assert.NotNull(saldo);
-            Assert.Equal(receita  - (despesa + despesaAtualizada), saldo.SaldoFinal);
+            Assert.Equal(receita - (despesa + despesaAtualizada), saldo.SaldoFinal);
         }
     }
 }

@@ -3,14 +3,10 @@ using Moq;
 using Moq.AutoMock;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Lancamento;
-using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Saldo;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using Sample.Fluxo.Caixa.Lancamento.Application.Events;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -41,7 +37,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Events
         {
             return new CancelarLancamentoEvent(Guid.NewGuid());
         }
-        
+
 
         #region CancelarLancamentoEvent
 
@@ -79,7 +75,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Events
                                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Exactly(2));
         }
 
-        
+
         [Fact]
         public async Task LancamentoEventHandler_HandleCancelarLancamentoEvent_DeveNotificarLancamentoNaoEncontrado()
         {

@@ -1,9 +1,8 @@
 ﻿using Sample.Fluxo.Caixa.Core.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.PlanoContas.Domain;
+using System;
+using System.Threading.Tasks;
 
 namespace Sample.FluxoCaixa.PlanoContas.Domain
 {

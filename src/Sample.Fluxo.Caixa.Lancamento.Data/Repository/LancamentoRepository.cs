@@ -3,7 +3,6 @@ using Sample.Fluxo.Caixa.Core.Data;
 using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

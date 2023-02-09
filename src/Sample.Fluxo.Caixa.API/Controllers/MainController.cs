@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using System.Collections.Generic;
 using System.Linq;
-using MediatR;
-using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 
 namespace Sample.Fluxo.Caixa.API.Controllers
 {

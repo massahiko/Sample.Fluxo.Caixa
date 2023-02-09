@@ -3,14 +3,12 @@ using Bogus;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.AutoMock;
-using Sample.Fluxo.Caixa.Saldo.Application.Events;
 using Sample.Fluxo.Caixa.Saldo.Application.Services;
 using Sample.Fluxo.Caixa.Saldo.Application.ViewModels;
 using Sample.Fluxo.Caixa.Saldo.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 

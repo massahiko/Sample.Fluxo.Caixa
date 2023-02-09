@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
-using Sample.Fluxo.Caixa.Core.Messages;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Lancamento;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Saldo;
@@ -190,7 +189,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Application.Events
         }
 
         private async Task<bool> ExcluirValorSaldo<IEvent>(
-            DateTime dataEscrituracao, 
+            DateTime dataEscrituracao,
             decimal valor) where IEvent : IntegrationEvent
         {
             var saldo = await _saldoRepository.ObterPorData(dataEscrituracao);
@@ -214,7 +213,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Application.Events
                 default:
                     break;
             }
-            
+
             _saldoRepository.Atualizar(saldo);
             return true;
         }

@@ -130,7 +130,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Tests.Application.Events
             _mocker.GetMock<ISaldoRepository>()
                 .Setup(x => x.ValidarExisteSaldoInicialOutraData(It.IsAny<DateTime>()))
                 .ReturnsAsync(true);
-                        
+
             // Act
             await saldoEventHandler.Handle(CriarAtualizarSaldoInicialEvent(), It.IsAny<CancellationToken>());
 

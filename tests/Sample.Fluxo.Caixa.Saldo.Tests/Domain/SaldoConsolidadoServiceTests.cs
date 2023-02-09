@@ -3,7 +3,6 @@ using Moq;
 using Moq.AutoMock;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
-using Sample.Fluxo.Caixa.Saldo.Application.Services;
 using Sample.Fluxo.Caixa.Saldo.Domain;
 using System;
 using System.Collections.Generic;

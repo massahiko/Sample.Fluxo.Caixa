@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Saldo.Application.ViewModels;
 using Sample.Fluxo.Caixa.Saldo.Domain;
@@ -87,7 +86,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Application.Services
             {
                 _logger.LogInformation($"Gerando relatório de Saldos Consolidados");
 
-                var saldos = (await ObterTodos(new SaldoFilter())).Data;
+                var saldos = (await ObterTodos(new SaldoFilter())).Data.OrderBy(n=>n.DataEscrituracao);
 
                 var relatorio = new List<string>()
                 {

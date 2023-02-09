@@ -1,22 +1,17 @@
-version: "3.4"
+﻿version: "3.4"
 
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: sample/fluxo-caixa-sql-server:latest
+    build: 
+      context: ./sql
+      dockerfile: ./Dockerfile
     environment:
       SA_PASSWORD: "1q2w!Q@W"
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
     ports:
       - "1433:1433"
-  mssqltools:
-    image: mcr.microsoft.com/mssql-tools
-    depends_on:
-      - sqlserver
-    volumes:
-      - ./FluxoCaixa.sql:/tmp/FluxoCaixa.sql
-      - ./init-basefluxocaixa.sh:/tmp/init-basefluxocaixa.sh
-    command: /bin/bash ./tmp/init-basefluxocaixa.sh
 
   mongodb:
     image: 'bitnami/mongodb:latest'

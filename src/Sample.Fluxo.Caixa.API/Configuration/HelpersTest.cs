@@ -7,7 +7,7 @@ namespace Sample.Fluxo.Caixa.API.Configuration
         public static readonly string DefaultLogFilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
 
-        
+
 
     }
 }

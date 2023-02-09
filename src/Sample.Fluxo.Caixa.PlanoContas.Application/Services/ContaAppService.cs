@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
+using Sample.Fluxo.Caixa.PlanoContas.Domain;
 using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sample.Fluxo.Caixa.Core.Communication.Mediator;
-using Sample.Fluxo.Caixa.Core.Pageable;
-using System.Collections;
-using Sample.Fluxo.Caixa.PlanoContas.Domain;
 
 namespace Sample.Fluxo.Caixa.PlanoContas.Application.Services
 {

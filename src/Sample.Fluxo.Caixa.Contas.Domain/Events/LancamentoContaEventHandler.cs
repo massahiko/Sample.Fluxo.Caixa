@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
-using Sample.Fluxo.Caixa.Core.Messages;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Lancamento;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.IntegrationEvents.Saldo;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;

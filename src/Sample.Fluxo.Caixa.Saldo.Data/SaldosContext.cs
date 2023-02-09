@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
+using Sample.Fluxo.Caixa.Core.Communication.Mediator;
+using Sample.Fluxo.Caixa.Core.Data;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sample.Fluxo.Caixa.Core.Communication.Mediator;
-using MongoDB.Driver;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using Sample.Fluxo.Caixa.Core.Data;
 
 namespace Sample.Fluxo.Caixa.Saldo.Data
 {
-    public class SaldoContext : IUnitOfWork 
+    public class SaldoContext : IUnitOfWork
     {
         private readonly IMediatorHandler _mediatorHandler;
         private IMongoDatabase Database { get; set; }
@@ -67,10 +67,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Data
                     await Session.CommitTransactionAsync();
                 }
 
-                var sucesso = _commands.Count > 0;
-                if (sucesso) await _mediatorHandler.PublicarEventos(this);
-
-                return sucesso;
+                return _commands.Count > 0;
             }
             catch (MongoWriteException ex)
             {

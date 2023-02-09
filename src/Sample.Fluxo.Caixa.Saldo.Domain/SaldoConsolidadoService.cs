@@ -1,8 +1,8 @@
 ﻿using Sample.Fluxo.Caixa.Core.Communication.Mediator;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sample.Fluxo.Caixa.Saldo.Domain
 {

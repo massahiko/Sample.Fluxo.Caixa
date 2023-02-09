@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications
 {
-    public class DomainNotificationHandler : INotificationHandler<DomainNotification> , IDisposable
+    public class DomainNotificationHandler : INotificationHandler<DomainNotification>, IDisposable
     {
         private List<DomainNotification> _notifications;
 

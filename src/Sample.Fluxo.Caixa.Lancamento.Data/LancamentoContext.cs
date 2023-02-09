@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.Data;
 using Sample.Fluxo.Caixa.Core.Messages;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Sample.Fluxo.Caixa.Core.Communication.Mediator;
-using FluentValidation.Results;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Data
 {

@@ -8,7 +8,7 @@ namespace Sample.Fluxo.Caixa.Saldo.Domain
 {
     public interface ISaldoRepository : IRepository<Saldo>
     {
-        Task<PagedResult<Saldo>> ObterTodos(SaldoFilter saldoFilter );
+        Task<PagedResult<Saldo>> ObterTodos(SaldoFilter saldoFilter);
         Task<IEnumerable<Saldo>> ObterListaMaiorIgualData(DateTime dateTime);
         Task<Saldo> ObterPorData(DateTime dateTime);
         Task<bool> ValidarExisteSaldoInicialOutraData(DateTime dateTime);

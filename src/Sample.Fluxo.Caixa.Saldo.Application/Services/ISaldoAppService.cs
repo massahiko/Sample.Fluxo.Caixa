@@ -11,6 +11,6 @@ namespace Sample.Fluxo.Caixa.Saldo.Application.Services
         Task<PagedResult<SaldoViewModel>> ObterTodos(SaldoFilter saldoFilter);
         Task<SaldoViewModel> ObterPorData(DateTime dateTime);
         Task<bool> ExcluirSaldo(Guid id);
-        Task<byte[]> GerarRelatorio();        
+        Task<byte[]> GerarRelatorio();
     }
 }

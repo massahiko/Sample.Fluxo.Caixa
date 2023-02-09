@@ -2,12 +2,10 @@
 using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
 using Sample.Fluxo.Caixa.Saldo.Application.ViewModels;
-using Sample.FluxoCaixa.PlanoContas.Domain;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using Xunit;
 
@@ -81,7 +79,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Config
         {
             foreach (var lancamento in lancamentos)
             {
-                Client.PostAsJsonAsync("Lancamento/Criar", lancamento).Wait();            
+                Client.PostAsJsonAsync("Lancamento/Criar", lancamento).Wait();
             }
         }
 

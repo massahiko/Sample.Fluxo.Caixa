@@ -22,7 +22,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Application.Commands
 
         public LancamentoCommandHandler(
             ILogger<LancamentoCommandHandler> logger,
-            ILancamentoRepository lancamentoRepository, 
+            ILancamentoRepository lancamentoRepository,
             IMediatorHandler mediatorHandler)
         {
             _logger = logger;

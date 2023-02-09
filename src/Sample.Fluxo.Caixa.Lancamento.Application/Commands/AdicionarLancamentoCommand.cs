@@ -8,7 +8,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Application.Commands
     {
         public Guid Id { get; private set; }
         public Guid ContaId { get; private set; }
-        public decimal Valor { get; private set; }        
+        public decimal Valor { get; private set; }
         public DateTime DataEscrituracao { get; private set; }
 
         public AdicionarLancamentoCommand(Guid contaId, decimal valor, DateTime dataEscrituracao)
@@ -16,7 +16,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Application.Commands
             Id = Guid.NewGuid();
             AggregateId = Id;
             ContaId = contaId;
-            Valor = valor;            
+            Valor = valor;
             DataEscrituracao = dataEscrituracao;
         }
         public override bool EhValido()
@@ -41,7 +41,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Application.Commands
 
             RuleFor(c => c.Valor)
                .GreaterThan(0)
-               .WithMessage("O valor do item precisa ser maior que 0");            
+               .WithMessage("O valor do item precisa ser maior que 0");
         }
     }
 }

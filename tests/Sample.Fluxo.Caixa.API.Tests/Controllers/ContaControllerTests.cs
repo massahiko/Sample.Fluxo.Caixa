@@ -1,4 +1,5 @@
-﻿using Sample.Fluxo.Caixa.API.Tests.Config;
+﻿using Bogus;
+using Sample.Fluxo.Caixa.API.Tests.Config;
 using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.PlanoContas.Application.ViewModels;
 using Sample.FluxoCaixa.PlanoContas.Domain;
@@ -17,10 +18,12 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
     public class ContaControllerTests
     {
         private readonly IntegrationTestsFixture<StartupTests> _testsFixture;
+        private readonly Faker _faker;
 
         public ContaControllerTests(IntegrationTestsFixture<StartupTests> testsFixture)
         {
             _testsFixture = testsFixture;
+            _faker = new Faker("pt_BR");
         }
 
         [Fact, TestPriority(1)]
@@ -30,7 +33,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             var contaViewModel = new ContaViewModel()
             {
                 ContaTipo = ContaTipo.SaldoInicial,
-                Descricao = "CONTA TESTE INTEGRACAO",
+                Descricao = _faker.Name.FullName(),
             };
 
             // Act
@@ -58,7 +61,7 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
                                         await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
 
-            var contaAtualizar = contas.FirstOrDefault(n => n.Descricao == "CONTA TESTE INTEGRACAO");
+            var contaAtualizar = contas.FirstOrDefault();
 
             contaAtualizar.Descricao = "CONTA ATUALIZAR TESTE INTEGRACAO";
 
@@ -86,9 +89,9 @@ namespace Sample.Fluxo.Caixa.API.Tests.Controllers
             var contas = JsonSerializer.Deserialize<PagedResult<ContaViewModel>>(
                                         await response.Content.ReadAsStringAsync().ConfigureAwait(false),
                                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }).Data;
-                                        
-                            
-            var contaExcluir = contas.FirstOrDefault(n => n.Descricao == "CONTA ATUALIZAR TESTE INTEGRACAO");
+
+
+            var contaExcluir = contas.FirstOrDefault();
 
             // Act
             response = await _testsFixture.Client.DeleteAsync($"Conta/Excluir/{contaExcluir.Id}");

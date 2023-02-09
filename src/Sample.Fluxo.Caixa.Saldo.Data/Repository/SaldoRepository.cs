@@ -1,13 +1,13 @@
-﻿using Sample.Fluxo.Caixa.Core.Data;
+﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using Sample.Fluxo.Caixa.Core.Data;
+using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Saldo.Domain;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MongoDB.Driver;
-using ServiceStack;
-using Sample.Fluxo.Caixa.Core.Pageable;
-using MongoDB.Driver.Linq;
 
 namespace Sample.Fluxo.Caixa.Saldo.Data.Repository
 {
@@ -24,12 +24,12 @@ namespace Sample.Fluxo.Caixa.Saldo.Data.Repository
 
         public async Task<IEnumerable<Domain.Saldo>> ObterListaMaiorIgualData(DateTime dateTime)
         {
-            return await _context.Saldos().Find(p => p.DataEscrituracao >= dateTime).ToListAsync();
+            return await _context.Saldos().Find(p => p.DataEscrituracao.Date >= dateTime.Date).ToListAsync();
         }
 
         public async Task<Domain.Saldo> ObterPorData(DateTime dateTime)
         {
-            var result = await ObterTodos(new SaldoFilter() { DataEscrituracao = dateTime });
+            var result = await ObterTodos(new SaldoFilter() { DataEscrituracao = dateTime.Date });
             return result.Data.FirstOrDefault();
         }
 

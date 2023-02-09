@@ -10,9 +10,9 @@ namespace Sample.Fluxo.Caixa.PlanoContas.Application.AutoMapper
         {
             CreateMap<ContaViewModel, Conta>()
                .ConstructUsing(p =>
-                   new Conta(p.Descricao, 
+                   new Conta(p.Descricao,
                              p.Ativo,
-                             p.ContaTipo, 
+                             p.ContaTipo,
                              p.DataCadastro));
         }
     }

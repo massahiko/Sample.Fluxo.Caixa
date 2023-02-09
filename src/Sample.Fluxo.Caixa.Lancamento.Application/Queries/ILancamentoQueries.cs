@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using System;
+﻿using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Application.Queries.ViewModels;
-using Sample.Fluxo.Caixa.Core.Pageable;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
+using System;
+using System.Threading.Tasks;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Application.Queries
 {

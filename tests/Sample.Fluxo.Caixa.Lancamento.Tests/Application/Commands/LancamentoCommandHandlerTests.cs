@@ -4,11 +4,11 @@ using Moq.AutoMock;
 using Sample.Fluxo.Caixa.Core.Communication.Mediator;
 using Sample.Fluxo.Caixa.Core.Messages.CommonMessages.Notifications;
 using Sample.Fluxo.Caixa.Lancamento.Application.Commands;
-using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Xunit;
 using Sample.Fluxo.Caixa.Lancamento.Domain;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Commands
 {
@@ -42,8 +42,8 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Commands
         [Theory]
         [InlineData("86040cc2-ce8f-465f-8b50-bdfc1883a02c", 100, "2023-01-01")]
         public async Task LancamentoCommandHandler_HandleAdicionarLancamentoCommand_DeveAdicionarComSucesso(
-            Guid contaId, 
-            decimal valor, 
+            Guid contaId,
+            decimal valor,
             DateTime dataEscrituracao)
         {
             // Arrange
@@ -81,7 +81,7 @@ namespace Sample.Fluxo.Caixa.Lancamento.Tests.Application.Commands
                .ReturnsAsync(true);
 
             // Act
-            var result = await lancamentoCommandHandler.Handle(CriarAdicionarLancamentoCommand(Guid.Empty,0, It.IsAny<DateTime>()), It.IsAny<CancellationToken>());
+            var result = await lancamentoCommandHandler.Handle(CriarAdicionarLancamentoCommand(Guid.Empty, 0, It.IsAny<DateTime>()), It.IsAny<CancellationToken>());
 
             // Assert
             Assert.False(result);
